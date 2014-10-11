@@ -1,8 +1,9 @@
 #include <Servo.h>
 
-//    <---    <-    .    .    ->    --->
-//     179   130   105  102   85     0 
-//     179   120   103  101   79     0
+//    TOWERPRO SG90 modified to continuous rotation with 2.2K ohm SMD resistors movement values:
+//    <---    <-    .STOP.    ->    --->
+//     179   130   105-102   85     0 
+//     179   120   103-101   79     0
 
 Servo Rservo;
 Servo Lservo;
@@ -12,9 +13,10 @@ int LDR_l = A0;
 int LDR_r = A1;
 int LED_l = A2;
 int LED_r = A3;
-int Rforward = 140;  // Valor avance, encontrar valor central y jugar
-int Lforward = 140;  // 
+int Rforward = 140;  // Intermediate value for the servo to go forward
+int Lforward = 70;  // Servos are instaled mirrored, so they have to rotate in opposed directions
 
+/* PID part, left aside for now  
 int forward=120;
 float kp=.04;
 float ki=0.00002;
@@ -26,6 +28,7 @@ int u;
 
 int val_l =0;
 int val_r =0;
+*/
 
 void setup(){
   Lservo.attach(9);
@@ -36,7 +39,12 @@ void setup(){
 
 void loop()
 {
-  p=analogRead(LDR_l)-analogRead(LDR_r);  // Right-Left
+
+int val_l = analogRead(LDR_l);
+int val_r = analogRead(LDR_r);
+
+/* PID part, left aside for now  
+  p=val_l)-analogRead(val_r);  // Right-Left
   i=i+p;
   d=p-p_old;
   p_old=p;
@@ -45,16 +53,17 @@ void loop()
 
   u=kp*p+ki*i+kd*d;             // Suma PID
   
+*/
+
 Rservo.write(Rforward+u);
 Lservo.write(Lforward-u);
 
 
 
-// ANTENITAS FEEDBACK
-int val_l = analogRead(LDR_l);
-  val_l = map(val_l, 0, 1023, 100, 255);
-  analogWrite(LED_l, val_l);
-int val_r = analogRead(LDR_r);
-  val_r = map(val_r, 0, 1023, 100, 255);
-  analogWrite(LED_r, val_r);
+// Feedback head lights
+int polarization = 100    // Due to the lack of enough PWM pins in the Arduino PRO MICRO, we map from the value of polarization of the given LED and the full brightness.
+val_l = map(val_l, 0, 1023, polarization, 255);    
+analogWrite(LED_l, val_l);
+val_r = map(val_r, 0, 1023, polarization, 255);
+analogWrite(LED_r, val_r);
 }
