@@ -13,8 +13,8 @@ int LDR_l = A0;
 int LDR_r = A1;
 int LED_l = A2;
 int LED_r = A3;
-int Rforward = 140;  // Intermediate value for the servo to go forward
-int Lforward = 70;  // Servos are instaled mirrored, so they have to rotate in opposed directions
+int Rforward = 50;  // Intermediate value for the servo to go forward
+int Lforward = 140;  // Servos are instaled mirrored, so they have to rotate in opposed directions
 
 /* PID part, left aside for now  
 int forward=120;
@@ -52,16 +52,15 @@ int val_r = analogRead(LDR_r);
   if ((p*i)<0) i=0;  		// corrige el overshooting - integral windup
 
   u=kp*p+ki*i+kd*d;             // Suma PID
-  
 */
 
-Rservo.write(Rforward+u);
-Lservo.write(Lforward-u);
+Rservo.write(Rforward);
+Lservo.write(Lforward);
 
 
 
 // Feedback head lights
-int polarization = 100    // Due to the lack of enough PWM pins in the Arduino PRO MICRO, we map from the value of polarization of the given LED and the full brightness.
+int polarization = 100;    // Due to the lack of enough PWM pins in the Arduino PRO MICRO, we map from the value of polarization of the given LED and the full brightness.
 val_l = map(val_l, 0, 1023, polarization, 255);    
 analogWrite(LED_l, val_l);
 val_r = map(val_r, 0, 1023, polarization, 255);
