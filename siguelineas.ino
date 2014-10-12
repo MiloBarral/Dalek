@@ -13,8 +13,10 @@ int LDR_l = A0;
 int LDR_r = A1;
 int LED_l = A2;
 int LED_r = A3;
-int Rforward = 50;  // Intermediate value for the servo to go forward
-int Lforward = 140;  // Servos are instaled mirrored, so they have to rotate in opposed directions
+//int Rforward = 50;  // Intermediate value for the servo to go forward
+//int Lforward = 140;  // Servos are instaled mirrored, so they have to rotate in opposed directions
+int Lforward = 179;
+int Rforward = 0;
 
 /* PID part, left aside for now  
 int forward=120;
@@ -35,6 +37,7 @@ void setup(){
   Rservo.attach(10);
 //  Hservo.attach(5);
 //  Bservo.attach(6);
+delay(1000);
 }
 
 void loop()
@@ -53,11 +56,14 @@ int val_r = analogRead(LDR_r);
 
   u=kp*p+ki*i+kd*d;             // Suma PID
 */
-
-Rservo.write(Rforward);
+if (val_l>val_r){               // if left value is higher, turn right slowing right wheel
+Rservo.write(100);
 Lservo.write(Lforward);
-
-
+}
+if (val_l<val_r){
+Rservo.write(Rforward);
+Lservo.write(100);
+}
 
 // Feedback head lights
 int polarization = 100;    // Due to the lack of enough PWM pins in the Arduino PRO MICRO, we map from the value of polarization of the given LED and the full brightness.
