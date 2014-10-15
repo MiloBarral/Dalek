@@ -56,7 +56,7 @@ int val_r = analogRead(LDR_r);
 
   u=kp*p+ki*i+kd*d;             // Suma PID
 */
-if (val_l>val_r){               // if left value is higher, turn right slowing right wheel
+if (val_l>val_r){               // if left value is higher, turn right slowing (stopping) right wheel
 Rservo.write(100);
 Lservo.write(Lforward);
 }
