@@ -38,6 +38,9 @@ void setup(){
 //  Hservo.attach(5);
 //  Bservo.attach(6);
 delay(1000);
+
+// Insert some code to get the threshold values for 0 and 1.
+// beep - analogread over white - wait half a second - beep - wait a second - beep -wait half a second -analogread over black?  
 }
 
 void loop()
