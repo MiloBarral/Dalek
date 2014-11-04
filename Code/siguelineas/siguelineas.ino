@@ -15,11 +15,12 @@ int LED_l = A2;
 int LED_r = A3;
 //int Rforward = 50;  // Intermediate value for the servo to go forward
 //int Lforward = 140;  // Servos are instaled mirrored, so they have to rotate in opposed directions
-int Lforward = 179;
+int Lforward = 180;
 int Rforward = 0;
 
 /* PID part, left aside for now  
 int forward=120;
+
 float kp=.04;
 float ki=0.00002;
 float kd=50;
@@ -37,20 +38,18 @@ void setup(){
   Rservo.attach(10);
 //  Hservo.attach(5);
 //  Bservo.attach(6);
-delay(1000);
+delay(2000);
 
 // Insert some code to get the threshold values for 0 and 1.
 // beep - analogread over white - wait half a second - beep - wait a second - beep -wait half a second -analogread over black?  
 }
 
-void loop()
-{
-
+void loop(){
 int val_l = analogRead(LDR_l);
 int val_r = analogRead(LDR_r);
 
 /* PID part, left aside for now  
-  p=val_l)-analogRead(val_r);  // Right-Left
+  p=analogRead(LDR_l)-analogRead(LDR_r);  // Right-Left
   i=i+p;
   d=p-p_old;
   p_old=p;
@@ -58,6 +57,21 @@ int val_r = analogRead(LDR_r);
   if ((p*i)<0) i=0;  		// corrige el overshooting - integral windup
 
   u=kp*p+ki*i+kd*d;             // Suma PID
+
+  
+int Lforward = 180;		// brakes with --
+int Rforward = 0;		// brakes with ++
+
+if (u>0){					turn right
+Lservo.write(Lforward);		
+Rservo.write(Rforward+u);
+}
+if (u<0){					turn left
+Lservo.write(Lforward-u);		
+Rservo.write(Rforward);
+}	
+
+
 */
 if (val_l>val_r){               // if left value is higher, turn right slowing (stopping) right wheel
 Rservo.write(100);
