@@ -32,32 +32,32 @@ float p_old=0;
 int u;
 
 void setup(){
-Hservo.attach(HEAD_SERVO);
-Bservo.attach(LEFT_SERVO);
-Lservo.attach(LEFT_SERVO);
-Rservo.attach(RIGHT_SERVO);
+  Hservo.attach(HEAD_SERVO);
+  Bservo.attach(LEFT_SERVO);
+  Lservo.attach(LEFT_SERVO);
+  Rservo.attach(RIGHT_SERVO);
 
-delay(2000);
+  delay(2000);
 // Insert some code to get the threshold values for 0 and 1. ¿beep - analogread over white - wait half a second - beep - wait a second - beep -wait half a second -analogread over black?
 }
 
 void loop(){
-int val_l = analogRead(LEFT_SENSOR);  // POSIBLE USAR DIRECTAMENTE LO DEL DEFINE Y AHORRAR VARIABLE LDR_l?
-int val_r = analogRead(RIGHT_FORWARD);
-p=val_l-val_r; // left-right
-i=i+p;
-d=p-p_old;
-p_old=p;
-if ((p*i)<0) i=0; // corrects overshooting - integral windup
-u=kp*p+ki*i+kd*d; // Suma PID
-if (u>0){ // turn right
-Lservo.write(Lforward);
-Rservo.write(Rforward+u);
-}
-if (u<0){ // turn left
-Lservo.write(Lforward-u);
-Rservo.write(Rforward);
-}
+  int val_l = analogRead(LEFT_SENSOR);  // POSIBLE USAR DIRECTAMENTE LO DEL DEFINE Y AHORRAR VARIABLE LDR_l?
+  int val_r = analogRead(RIGHT_FORWARD);
+  p=val_l-val_r; // left-right
+  i=i+p;
+  d=p-p_old;
+  p_old=p;
+  if ((p*i)<0) i=0; // corrects overshooting - integral windup
+    u=kp*p+ki*i+kd*d; // Suma PID
+    if (u>0){ // turn right
+    Lservo.write(Lforward);
+    Rservo.write(Rforward+u);
+  }
+  if (u<0){ // turn left
+    Lservo.write(Lforward-u);
+    Rservo.write(Rforward);
+  }
 // Feedback head LEDs
 int polarization = 100; // Due to the lack of enough PWM pins in the Arduino PRO MICRO, we map from the value of polarization of the given LED and the full brightness.
 val_l = map(val_l, 0, 1023, polarization, 255);
